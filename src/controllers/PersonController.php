@@ -61,7 +61,7 @@ class PersonController extends Controller
     {
         $searchModel = new PersonSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-        $dataProvider->sort = ['defaultOrder' => ['email' => SORT_ASC]];
+        $dataProvider->sort = ['defaultOrder' => ['name' => SORT_ASC]];
 
         return $this->render('index', [
             'searchModel' => $searchModel,
