@@ -30,12 +30,12 @@ $this->params['breadcrumbs'][] = $this->title;
     'filterModel' => $searchModel,
     'columns' => [
         [
-            'attribute' => 'email',
+            'attribute' => 'name',
             'format' => 'raw',
             'value' => function ($model) {
                 $deleted = $model->isDeleted ? '<span class="badge text-bg-danger">Deleted</span>' : '';
                 return Html::a(
-                    "$deleted $model->email",
+                    "$deleted $model->name",
                     Url::to(['view', 'id' => $model->id]),
                     [
                         'title' => 'View Person',
@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
             },
 
         ],
-        'name',
+        'email',
         //'phone',
         'mobile',
         //'notes:ntext',
