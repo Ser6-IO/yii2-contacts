@@ -2,6 +2,7 @@
 
 namespace ser6io\yii2contacts\controllers;
 
+use Yii;
 use ser6io\yii2contacts\models\Address;
 use ser6io\yii2contacts\models\AddressSearch;
 use yii\web\Controller;
@@ -27,7 +28,7 @@ class AddressController extends Controller
                     'class' => \yii\filters\AccessControl::class,
                     'rules' => [ 
                         [
-                            'actions' => ['index', 'view'],
+                            'actions' => ['index', 'view', 'search-address-by-org-name'],
                             'allow' => true,
                             'roles' => ['contactsView'],
                         ],
@@ -63,6 +64,19 @@ class AddressController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    /**
+     * Returns a list off Addresses in JSON format, that match the search term.
+     * 
+     * @param string $term
+     * @return json
+     */
+    public function actionSearchAddressByOrgName($name)
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $addresses = Address::find()->joinWith('organization')->where(['like', 'organization.nickname', $name])->asArray()->all();
+        return $addresses;
     }
 
     /**
