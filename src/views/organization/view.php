@@ -15,6 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?= \ser6io\yii2bs5widgets\ToolBarWidget::widget([
     'title' => $this->title, 
+    'isDeleted' => $model->isDeleted,
     'groups' => [
         ['buttons' => ['update', 'delete'], 'visible' => 'contactsAdmin'],
     ],
@@ -31,7 +32,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'phone',
         'designatedContact.email:email:Designated Contact',
         'notes:ntext',
-        'isDeleted:boolean',
         [
             'attribute' => 'metadata',
             'format' => 'raw',

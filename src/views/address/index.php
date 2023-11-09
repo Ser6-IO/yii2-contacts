@@ -26,13 +26,13 @@ $this->params['breadcrumbs'][] = $this->title;
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
+    'rowOptions'=>function($model){ return $model->isDeleted ? ['class' => 'bg-danger-subtle'] : null;},
     'columns' => [
         [
             'attribute' => 'type',
             'format' => 'raw',
             'value' => function ($model) {
-                $deleted = $model->isDeleted ? '<span class="badge text-bg-danger">Deleted</span>' : '';
-                return "$deleted <span class='badge text-bg-secondary'>" . Address::ADDRESS_TYPE[$model->type] . "</span>";
+                return "<span class='badge text-bg-secondary'>" . Address::ADDRESS_TYPE[$model->type] . "</span>";
             },
             'filter' => Address::ADDRESS_TYPE,
         ],

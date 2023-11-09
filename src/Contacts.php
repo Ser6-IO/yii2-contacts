@@ -9,6 +9,8 @@ use Yii;
  */
 class Contacts extends \yii\base\Module implements \yii\base\BootstrapInterface
 {
+    public $initAction;
+    
     /**
      * {@inheritdoc}
      */

@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?= \ser6io\yii2bs5widgets\ToolBarWidget::widget([
-    'title' => $this->title, 
+    'title' => $this->title,
     'groups' => [
         ['buttons' => ['create'], 'visible' => 'contactsAdmin'],
     ],
@@ -28,23 +28,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
+    'rowOptions'=>function($model){ return $model->isDeleted ? ['class' => 'bg-danger-subtle'] : null;},
     'columns' => [
-        [
-            'attribute' => 'name',
-            'format' => 'raw',
-            'value' => function ($model) {
-                $deleted = $model->isDeleted ? '<span class="badge text-bg-danger">Deleted</span>' : '';
-                return Html::a(
-                    "$deleted $model->name",
-                    Url::to(['view', 'id' => $model->id]),
-                    [
-                        'title' => 'View Person',
-                        'data-bs-toggle' => 'tooltip'
-                    ]
-                );
-            },
-
-        ],
+        'name',
         'email',
         //'phone',
         'mobile',
@@ -56,6 +42,13 @@ $this->params['breadcrumbs'][] = $this->title;
         //'updated_at',
         //'created_by',
         //'updated_by',
+        [
+            'class' => ActionColumn::className(),
+            'template' => '{view}',
+            'urlCreator' => function ($action, Person $model, $key, $index, $column) {
+                return Url::toRoute(["$action", 'id' => $model->id]);
+             }
+        ],
     ],
 ]); ?>
 

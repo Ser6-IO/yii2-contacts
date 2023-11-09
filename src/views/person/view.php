@@ -16,8 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?= \ser6io\yii2bs5widgets\ToolBarWidget::widget([
     'title' => $this->title, 
+    'isDeleted' => $model->isDeleted,
     'groups' => [
-        ['buttons' => ['update', 'roles', 'delete'], 'visible' => 'contactsAdmin'],
+        ['buttons' => ['update', 'delete'], 'visible' => 'contactsAdmin'],
     ],
     'id' => $model->id
 ]) ?>
@@ -39,7 +40,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 return $model->user ? Html::a($model->user->id, ['/admin/user/view', 'id' => $model->user->id]) : null;
             }
         ],
-        'isDeleted:boolean',
         [
             'attribute' => 'metadata',
             'format' => 'raw',

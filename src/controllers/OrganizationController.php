@@ -79,7 +79,7 @@ class OrganizationController extends Controller
         $model = $this->findModel($id);
 
         $addressDataProvider = new ActiveDataProvider([
-            'query' => Address::find()->organization($id),
+            'query' => Address::find()->organization($id)->notDeleted(),
             'pagination' => false,
           //  'sort' => ['defaultOrder' => ['name'=>SORT_ASC]],
         ]);

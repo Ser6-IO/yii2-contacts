@@ -26,6 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
+    'rowOptions'=>function($model){ return $model->isDeleted ? ['class' => 'bg-danger-subtle'] : null;},
     'columns' => [
         //'full_name',
         [
@@ -33,17 +34,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'label' => 'Name',
             'format' => 'raw',
             'value' => function ($model) {
-                $deleted = $model->isDeleted ? '<span class="badge text-bg-danger">Deleted</span>' : '';
-                return Html::a(
-                    "$deleted $model->nickname",
-                    Url::to(['view', 'id' => $model->id]),
-                    [
-                        'title' => 'View Organization',
-                        'data-bs-toggle' => 'tooltip'
-                    ]
-                ) . "<br><small>$model->full_name</small>";
+                return "$model->nickname<br><small>$model->full_name</small>";
             },
-
         ],
         [
             'attribute' => 'type',
@@ -64,6 +56,13 @@ $this->params['breadcrumbs'][] = $this->title;
         //'updated_at',
         //'created_by',
         //'updated_by',
+        [
+            'class' => ActionColumn::className(),
+            'template' => '{view}',
+            'urlCreator' => function ($action, Organization $model, $key, $index, $column) {
+                return Url::toRoute(["$action", 'id' => $model->id]);
+             }
+        ],
     ],
 ]); ?>
 
