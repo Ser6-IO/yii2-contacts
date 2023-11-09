@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['main/index']
 if ($model->person_id != null){
     $this->params['breadcrumbs'][] = ['label' => 'People', 'url' => ['person/index']];
     $this->params['breadcrumbs'][] = ['label' => $model->person->name, 'url' => ['person/view', 'id' => $model->person_id]];
-} else {
+} elseif ($model->organization_id != null) {
     $this->params['breadcrumbs'][] = ['label' => 'Organizations', 'url' => ['organization/index']];
     $this->params['breadcrumbs'][] = ['label' => $model->organization->nickname, 'url' => ['organization/view', 'id' => $model->organization_id]];
 }
