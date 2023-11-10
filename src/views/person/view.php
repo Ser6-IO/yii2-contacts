@@ -30,14 +30,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'email:email',
         'phone',
         'mobile',
-        'notes:ntext',
-        'organization.nickname:text:Organization',
+        [
+            'attribute' => 'organization_id',
+            'label' => 'Organization',
+            'format' => 'raw',
+            'value' => function ($model) {
+                return $model->organization ? $model->organization->nickname . ' ' . Html::a('<i class="bi bi-box-arrow-up-right"></i>', ['/contacts/organization/view', 'id' => $model->organization->id], ['title' => 'View Organization', 'data-bs-toggle' => 'tooltip']) : null;
+            }
+        ],
         [
             'attribute' => 'user',
             'label' => 'User Id',
             'format' => 'raw',
             'value' => function ($model) {
-                return $model->user ? Html::a($model->user->id, ['/admin/user/view', 'id' => $model->user->id]) : null;
+                return $model->user ? $model->user->id . ' ' . Html::a('<i class="bi bi-box-arrow-up-right"></i>', ['/admin/user/view', 'id' => $model->user->id], ['title' => 'View User', 'data-bs-toggle' => 'tooltip']) : null;
             }
         ],
         [
@@ -54,7 +60,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     return null;
                 }
             }
-        ]
+        ],
+        'notes:ntext',
     ],
 ]) ?>
 

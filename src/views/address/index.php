@@ -51,24 +51,26 @@ $this->params['breadcrumbs'][] = $this->title;
             'format' => 'raw',
             'value' => function ($model) {
                 if (isset($model->person_id))
-                    return Html::a(
-                        '<i class="bi bi-person"></i> ' . $model->person->email,
-                        Url::to(['person/view', 'id' => $model->person_id]),
-                        [
-                            'title' => 'View Person',
-                            'data-bs-toggle' => 'tooltip'
-                        ]
-                    );
+                    return '<i class="bi bi-person"></i> ' . $model->person->email . ' ' .
+                        Html::a(
+                            '<i class="bi bi-box-arrow-up-right"></i>',
+                            ['person/view', 'id' => $model->person_id],
+                            [
+                                'title' => 'View Person',
+                                'data-bs-toggle' => 'tooltip'
+                            ]
+                        );
                 else
-                    return Html::a(
-                        '<i class="bi bi-building"></i> ' . $model->organization->nickname,
-                        Url::to(['organization/view', 'id' => $model->organization_id]),
-                        [
-                            'title' => 'View Organization',
-                            'data-bs-toggle' => 'tooltip'
-                        ]
-                    );
-            },
+                    return '<i class="bi bi-building"></i> ' . $model->organization->nickname . ' ' .
+                        Html::a(
+                            '<i class="bi bi-box-arrow-up-right"></i>',
+                            ['organization/view', 'id' => $model->organization_id],
+                            [
+                                'title' => 'View Organization',
+                                'data-bs-toggle' => 'tooltip'
+                            ]
+                        );
+                },
         ],
         //'line_1',
         //'line_2',

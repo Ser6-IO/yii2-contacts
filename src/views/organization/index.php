@@ -45,13 +45,20 @@ $this->params['breadcrumbs'][] = $this->title;
             },
             'filter' => Organization::ORGANIZATION_TYPE,
         ],
+        [
+            'attribute' => 'contact_id',
+            'label' => 'Contact',
+            'format' => 'raw',
+            'value' => function ($model) {
+                return $model->contact_id ? $model->designatedContact->email . ' ' . Html::a('<i class="bi bi-box-arrow-up-right"></i>', ['/contacts/person/view', 'id' => $model->contact_id], ['title' => 'View Contact', 'data-bs-toggle' => 'tooltip']) : null;
+            }
+        ],
         //'nickname',
         
         //'email:email',
         //'phone',
         //'notes:ntext',
         //'metadata',
-        'designatedContact.email:text:Designated Contact',
         //'created_at',
         //'updated_at',
         //'created_by',
