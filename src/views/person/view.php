@@ -43,7 +43,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'label' => 'User Id',
             'format' => 'raw',
             'value' => function ($model) {
-                return $model->user ? $model->user->id . ' ' . Html::a('<i class="bi bi-box-arrow-up-right"></i>', ['/admin/user/view', 'id' => $model->user->id], ['title' => 'View User', 'data-bs-toggle' => 'tooltip']) : null;
+                if ($model->user) {
+                    return $model->user->id . ' ' . Html::a('<i class="bi bi-box-arrow-up-right"></i>', ['/admin/user/view', 'id' => $model->user->id], ['title' => 'View User', 'data-bs-toggle' => 'tooltip']);
+                } else {
+                    return 'Not found - ' . Html::a('Create it?', ['/admin/user/create'], ['title' => 'Create User', 'data-bs-toggle' => 'tooltip']);
+                }
+                
             }
         ],
         [
