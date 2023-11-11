@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->user->id . ' ' . Html::a('<i class="bi bi-box-arrow-up-right"></i>', ['/admin/user/view', 'id' => $model->user->id], ['title' => 'View User', 'data-bs-toggle' => 'tooltip']);
                 } else {
                     if (Yii::$app->user->can('admin')) { //userAdmin
-                        return 'Not found - ' . Html::a('<i class="bi bi-person-add"></i>', ['/admin/user/create'], ['title' => 'Create User', 'data-bs-toggle' => 'tooltip']);
+                        return 'Not found - ' . Html::a('<i class="bi bi-person-add"></i>', ['/admin/user/create', 'email' => $model->email], ['title' => 'Create User', 'data-bs-toggle' => 'tooltip']);
                     } else {
                         return 'Not found';
                     }                    
