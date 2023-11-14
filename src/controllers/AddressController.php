@@ -14,8 +14,6 @@ use yii\filters\VerbFilter;
  */
 class AddressController extends Controller
 {
-    public $layout = 'secondary';
-
     /**
      * @inheritDoc
      */

@@ -36,7 +36,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'mobile',
         //'notes:ntext',
         //'metadata',
-        'organization.nickname:text:Organization',
+        //'organization.nickname:text:Organization',
+        [
+            'attribute' => 'organization_id',
+            'format' => 'raw',
+            'value' => function ($model) {
+                if ($model->organization) {
+                    return $model->organization->nickname . ' ' . Html::a('<i class="bi bi-box-arrow-up-right"></i>', ['/contacts/organization/view', 'id' => $model->organization->id], ['title' => 'View Organization', 'data-bs-toggle' => 'tooltip']);
+                } else {
+                    return '';
+                }
+            },
+        ],
         //'user_id',
         //'created_at',
         //'updated_at',

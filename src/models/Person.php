@@ -3,7 +3,7 @@
 namespace ser6io\yii2contacts\models;
 
 use Yii;
-use ser6io\yii2admin\models\User;
+use ser6io\yii2admin\models\UserAdmin;
 
 /**
  * This is the model class for table "person".
@@ -114,17 +114,22 @@ class Person extends \yii\db\ActiveRecord
 
     public function getCreatedBy()
     {
-        return $this->hasOne(User::class, ['id' => 'created_by']);
+        return $this->hasOne(UserAdmin::class, ['id' => 'created_by']);
     }
 
     public function getUpdatedBy()
     {
-        return $this->hasOne(User::class, ['id' => 'updated_by']);
+        return $this->hasOne(UserAdmin::class, ['id' => 'updated_by']);
     }
 
     public function getUser()
     {
-        return $this->hasOne(User::class, ['email' => 'email']);
+        return $this->hasOne(UserAdmin::class, ['username' => 'email']);
+    }
+
+    public function getUserAccounts()
+    {
+        return $this->hasMany(UserAdmin::class, ['email' => 'email']);
     }
 
     public function beforeDelete()

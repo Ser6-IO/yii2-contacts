@@ -55,6 +55,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 
             }
         ],
+        //List all User Accounts associated to this person
+        [
+            'attribute' => 'userAccounts',
+            'label' => 'User Accounts',
+            'format' => 'raw',
+            'value' => function ($model) {
+                $userAccounts = [];
+                foreach ($model->userAccounts as $userAccount) {
+                    $userAccounts[] = $userAccount->id . ' ' . Html::a('<i class="bi bi-box-arrow-up-right"></i>', ['/admin/user/view', 'id' => $userAccount->id], ['title' => 'View User', 'data-bs-toggle' => 'tooltip']);
+                }
+                return implode('<br>', $userAccounts);
+            }
+        ],
         [
             'attribute' => 'metadata',
             'format' => 'raw',

@@ -12,8 +12,6 @@ use ser6io\yii2contacts\models\Address;
  */
 class MainController extends Controller
 {
-    public $layout = 'secondary';
-
     /**
      * @inheritDoc
      */

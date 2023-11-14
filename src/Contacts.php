@@ -27,6 +27,8 @@ class Contacts extends \yii\base\Module implements \yii\base\BootstrapInterface
 
         $this->layoutPath = '@app/views/layouts';
 
+        $this->layout = 'secondary';
+
         //Secondary Menu items - must use two columns layout
         if (Yii::$app instanceof \yii\web\Application) {
             Yii::$app->params['secondaryMenu'] = [                

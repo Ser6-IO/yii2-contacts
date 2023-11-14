@@ -53,7 +53,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     return null;
                 }
             }
-        ]
+        ],
+        [
+            'attribute' => 'people',
+            'format' => 'raw',
+            'value' => function ($model) {
+                $people = [];
+                foreach ($model->contacts as $person) {
+                    $people[] = $person->email . ' ' . Html::a('<i class="bi bi-box-arrow-up-right"></i>', ['/contacts/person/view', 'id' => $person->id], ['title' => 'View Contact', 'data-bs-toggle' => 'tooltip']);
+                }
+                return implode('<br>', $people);
+            }
+        ],
     ],
 ]) ?>
 

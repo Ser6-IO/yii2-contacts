@@ -16,8 +16,6 @@ use yii\filters\VerbFilter;
  */
 class OrganizationController extends Controller
 {
-    public $layout = 'secondary';
-
     /**
      * @inheritDoc
      */
