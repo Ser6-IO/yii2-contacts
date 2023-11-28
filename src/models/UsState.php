@@ -60,5 +60,16 @@ class UsState
 		['AA' => 'Armed Forces America (Except Canada)'],
 		['AP' => 'Armed Forces Pacific']
 	];
+
+	//unnest one level
+	public static function getStates()
+	{
+		$states = [];
+		foreach (self::CODE_NAME as $state) {
+			$states[] = array_values($state)[0];
+		}
+		return $states;
+	}
+	
 }
 ?>
