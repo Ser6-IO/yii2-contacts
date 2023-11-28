@@ -19,5 +19,15 @@ class CanadaProvince
         ['SK' => "Saskatchewan"],
         ['YT' => "Yukon"],
     ];
+
+    //unnest one level
+    public static function getProvinces()
+    {
+        $result = [];
+        foreach (self::CODE_NAME as $item) {
+            $result[] = array_keys($item)[0];
+        }
+        return $result;
+    }
 }
 ?>
