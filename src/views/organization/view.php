@@ -2,7 +2,6 @@
 
 use yii\bootstrap5\Html;
 use ser6io\yii2bs5widgets\DetailView;
-use ser6io\yii2bs5widgets\ListView;
 
 /** @var yii\web\View $this */
 /** @var ser6io\yii2contacts\models\Organization $model */
@@ -16,16 +15,17 @@ $this->params['breadcrumbs'][] = $this->title;
 <?= \ser6io\yii2bs5widgets\ToolBarWidget::widget([
     'title' => $this->title, 
     'isDeleted' => $model->isDeleted,
-    'groups' => [
-        ['buttons' => ['update', 'delete'], 'visible' => 'contactsAdmin'],
-    ],
     'id' => $model->id,
+    'groups' => [
+        ['buttons' => ['update', 'soft-delete'], 'visible' => Yii::$app->user->can('contacts')],
+        ['buttons' => ['restore'], 'visible' => Yii::$app->user->can('admin')],
+    ],
 ]) ?>
 
 <?= DetailView::widget([
     'model' => $model,
     'attributes' => [
-        'id',
+       // 'id',
         'full_name',
         //'type',
         'email:email',
@@ -70,19 +70,4 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?= \ser6io\yii2bs5widgets\CreatedByWidget::widget(['model' => $model]) ?>
 
-<?= \ser6io\yii2bs5widgets\ToolBarWidget::widget([
-    'title' => 'Addresses',
-    'titleTag' => 'h4',
-    'groups' => [
-        ['buttons' => ['create'], 'visible' => 'contactsAdmin'],
-    ],
-    'btnSize' => 'sm',
-    'route' => 'address',
-    'id' => $model->id,
-    'idParam' => 'o_id',
-]) ?>
-
-<?= ListView::widget([
-    'dataProvider' => $addressDataProvider,
-    'itemView' => '../address/_address',
-]) ?>
+<?= $this->render('../address/_index', ['model' => $model, 'idParam' => 'o_id',]) ?>

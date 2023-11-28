@@ -5,12 +5,23 @@ use yii\bootstrap5\Html;
 <?= \ser6io\yii2bs5widgets\ToolBarWidget::widget([
     'title' => '<span class="badge bg-light text-dark">' . $model::ADDRESS_TYPE[$model->type] . '</span>',
     'titleTag' => 'h4',
-    'groups' => [
-        ['buttons' => ['update', 'delete'], 'visible' => 'contactsAdmin'],
-    ],
     'id' => $model->id,
     'btnSize' => 'sm',
-    'route' => 'address',
+    'isDeleted' => $model->isDeleted,
+    'groups' => [
+        [
+            'buttons' => [
+                'update', 
+                'soft-delete'
+            ],
+            'visible' => Yii::$app->user->can('contacts'),
+            'config' => [
+                'update' => ['url' => ['address/update', 'id' => $model->id]],
+                'soft-delete' => ['route' => 'address',]
+            ],
+        ],
+        ['buttons' => ['restore'], 'visible' => Yii::$app->user->can('admin')],
+    ],
 ]) ?>
 
 <?= $model->line_1 ?><br>

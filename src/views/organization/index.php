@@ -1,10 +1,12 @@
 <?php
 
 use ser6io\yii2contacts\models\Organization;
+use ser6io\yii2contacts\models\Person;
 use yii\bootstrap5\Html;
 use yii\helpers\Url;
 use ser6io\yii2bs5widgets\ActionColumn;
 use ser6io\yii2bs5widgets\GridView;
+use yii\helpers\ArrayHelper;
 
 /** @var yii\web\View $this */
 /** @var ser6io\yii2contacts\models\OrganizationSearch $searchModel */
@@ -18,7 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <?= \ser6io\yii2bs5widgets\ToolBarWidget::widget([
     'title' => $this->title, 
     'groups' => [
-        ['buttons' => ['create'], 'visible' => 'contactsAdmin'],
+        ['buttons' => ['create'], 'visible' => Yii::$app->user->can('contacts')],
+        ['buttons' => ['show-deleted'], 'visible' => Yii::$app->user->can('admin')],  
     ],
 ]) ?>
 
@@ -49,28 +52,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'attribute' => 'contact_id',
             'label' => 'Contact',
             'format' => 'raw',
+            'filter' => ArrayHelper::map(Person::find()->select(['id', 'email'])->indexBy('email')->all(), 'id', 'email'),
             'value' => function ($model) {
                 return $model->contact_id ? $model->designatedContact->email . ' ' . Html::a('<i class="bi bi-box-arrow-up-right"></i>', ['/contacts/person/view', 'id' => $model->contact_id], ['title' => 'View Contact', 'data-bs-toggle' => 'tooltip']) : null;
             }
         ],
-        //'nickname',
-        
-        //'email:email',
-        //'phone',
-        //'notes:ntext',
-        //'metadata',
-        //'created_at',
-        //'updated_at',
-        //'created_by',
-        //'updated_by',
-        [
-            'class' => ActionColumn::className(),
-            'template' => '{view}',
-            'urlCreator' => function ($action, Organization $model, $key, $index, $column) {
-                return Url::toRoute(["$action", 'id' => $model->id]);
-             }
-        ],
+        ['class' => ActionColumn::className()],
     ],
 ]); ?>
-
-<?= \ser6io\yii2bs5widgets\ShowDeletedWidget::widget() ?>

@@ -17,17 +17,33 @@ $this->params['breadcrumbs'][] = $this->title;
 <?= \ser6io\yii2bs5widgets\ToolBarWidget::widget([
     'title' => $this->title, 
     'isDeleted' => $model->isDeleted,
+    'id' => $model->id,
     'groups' => [
-        ['buttons' => ['update', 'delete'], 'visible' => 'contactsAdmin'],
+        ['buttons' => ['update', 'soft-delete'], 'visible' => Yii::$app->user->can('contacts')],
+        ['buttons' => ['restore'], 'visible' => Yii::$app->user->can('admin')],
     ],
-    'id' => $model->id
 ]) ?>
 
 <?= DetailView::widget([
     'model' => $model,
     'attributes' => [
-        'id',
-        'email:email',
+     //   'id',
+        [
+            'attribute' => 'email',
+            'format' => 'raw',
+            'value' => function ($model) {
+                if ($model->user) {
+                    $link = Html::a('<i class="bi bi-box-arrow-up-right"></i>', ['/admin/user/view', 'id' => $model->user->id], ['title' => 'View User', 'data-bs-toggle' => 'tooltip']);
+                } else {
+                    if (Yii::$app->user->can('agent')) {
+                        $link =  Html::a('<i class="bi bi-person-add"></i>', ['/admin/user/create', 'email' => $model->email], ['title' => 'Create User', 'data-bs-toggle' => 'tooltip']);
+                    } else {
+                        $link = '';
+                    }                    
+                }
+                return "$model->email $link";
+            }
+        ],
         'phone',
         'mobile',
         [
@@ -36,23 +52,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'format' => 'raw',
             'value' => function ($model) {
                 return $model->organization ? $model->organization->nickname . ' ' . Html::a('<i class="bi bi-box-arrow-up-right"></i>', ['/contacts/organization/view', 'id' => $model->organization->id], ['title' => 'View Organization', 'data-bs-toggle' => 'tooltip']) : null;
-            }
-        ],
-        [
-            'attribute' => 'user',
-            'label' => 'User Id',
-            'format' => 'raw',
-            'value' => function ($model) {
-                if ($model->user) {
-                    return $model->user->id . ' ' . Html::a('<i class="bi bi-box-arrow-up-right"></i>', ['/admin/user/view', 'id' => $model->user->id], ['title' => 'View User', 'data-bs-toggle' => 'tooltip']);
-                } else {
-                    if (Yii::$app->user->can('admin')) { //userAdmin
-                        return 'Not found - ' . Html::a('<i class="bi bi-person-add"></i>', ['/admin/user/create', 'email' => $model->email], ['title' => 'Create User', 'data-bs-toggle' => 'tooltip']);
-                    } else {
-                        return 'Not found';
-                    }                    
-                }
-                
             }
         ],
         //List all User Accounts associated to this person
@@ -89,19 +88,4 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?= \ser6io\yii2bs5widgets\CreatedByWidget::widget(['model' => $model]) ?>
 
-<?= \ser6io\yii2bs5widgets\ToolBarWidget::widget([
-    'title' => 'Addresses',
-    'titleTag' => 'h4',
-    'groups' => [
-        ['buttons' => ['create'], 'visible' => 'contactsAdmin'],
-    ],
-    'btnSize' => 'sm',
-    'route' => 'address',
-    'id' => $model->id,
-    'idParam' => 'p_id',
-]) ?>
-
-<?= ListView::widget([
-    'dataProvider' => $addressDataProvider,
-    'itemView' => '../address/_address',
-]) ?>
+<?= $this->render('../address/_index', ['model' => $model, 'idParam' => 'p_id']) ?>

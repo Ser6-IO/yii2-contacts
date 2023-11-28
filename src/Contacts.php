@@ -7,14 +7,50 @@ use Yii;
 /**
  * Admin module definition class
  */
-class Contacts extends \yii\base\Module implements \yii\base\BootstrapInterface
-{
-    public $initAction;
-    
+class Contacts extends \yii\base\Module
+{   
     /**
      * {@inheritdoc}
      */
     public $controllerNamespace = 'ser6io\yii2contacts\controllers';
+
+        /**
+     * @inheritDoc
+     */
+    public function behaviors()
+    {
+        return array_merge(
+            parent::behaviors(),
+            [
+                'access' => [
+                    'class' => \yii\filters\AccessControl::class,
+                    'rules' => [ 
+                        [
+                            'actions' => ['index', 'view', 'search-address-by-org-name'],
+                            'allow' => true,
+                            'roles' => ['contactsView'],
+                        ],
+                        [
+                            'actions' => ['update', 'create', 'soft-delete'],
+                            'allow' => true,
+                            'roles' => ['contacts'],
+                        ], 
+                        [
+                            'actions' => ['restore', 'delete'],
+                            'allow' => true,
+                            'roles' => ['admin'],
+                        ]
+                    ],
+                ],
+                'verbs' => [
+                    'class' => \yii\filters\VerbFilter::class,
+                    'actions' => [
+                        'delete' => ['POST'],
+                    ],
+                ],
+            ]
+        );
+    }
 
     /**
      * {@inheritdoc}
@@ -35,16 +71,9 @@ class Contacts extends \yii\base\Module implements \yii\base\BootstrapInterface
                 ['label' => '<i class="bi bi-person-rolodex"></i> Contacts', 'url' => ['/contacts/main/index'], 'visible' => Yii::$app->user->can('contactsView')],
                 ['label' => '<i class="bi bi-person-lines-fill"></i> People', 'url' => ['/contacts/person/index'], 'visible' => Yii::$app->user->can('contactsView')],
                 ['label' => '<i class="bi bi-building"></i> Organizations', 'url' => ['/contacts/organization/index'], 'visible' => Yii::$app->user->can('contactsView')],
-                ['label' => '<i class="bi bi-geo-alt"></i> Addresses', 'url' => ['/contacts/address/index'], 'visible' => Yii::$app->user->can('contactsView')],  
+               // ['label' => '<i class="bi bi-geo-alt"></i> Addresses', 'url' => ['/contacts/address/index'], 'visible' => Yii::$app->user->can('contactsView')],  
             ];
         }
     }
 
-    public function bootstrap($app)
-    {
-        if ($app instanceof \yii\console\Application) {
-            $this->controllerNamespace = 'ser6io\yii2contacts\commands';
-            $this->defaultRoute = 'init';
-        }
-    }
 }

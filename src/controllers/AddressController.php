@@ -7,46 +7,12 @@ use ser6io\yii2contacts\models\Address;
 use ser6io\yii2contacts\models\AddressSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * AddressController implements the CRUD actions for Address model.
  */
 class AddressController extends Controller
 {
-    /**
-     * @inheritDoc
-     */
-    public function behaviors()
-    {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'access' => [
-                    'class' => \yii\filters\AccessControl::class,
-                    'rules' => [ 
-                        [
-                            'actions' => ['index', 'view', 'search-address-by-org-name'],
-                            'allow' => true,
-                            'roles' => ['contactsView'],
-                        ],
-                        [
-                            'actions' => ['update', 'create', 'delete'],
-                            'allow' => true,
-                            'roles' => ['contactsAdmin'],
-                        ],  
-                    ],
-                ],
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
-                    ],
-                ],
-            ]
-        );
-    }
-
     /**
      * Lists all Address models.
      *
@@ -130,6 +96,24 @@ class AddressController extends Controller
     }
 
     /**
+     * Soft deletes an existing Address model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param int $id ID
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionSoftDelete($id)
+    {
+        $model = $this->findModel($id);
+        $model->softDelete();
+        if ($model->person_id != null) {
+            return $this->redirect(['person/view', 'id' => $model->person_id]);
+        } else {
+            return $this->redirect(['organization/view', 'id' => $model->organization_id]);
+        }
+    }
+
+    /**
      * Deletes an existing Address model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
@@ -139,7 +123,25 @@ class AddressController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $model->softDelete();
+        $model->delete();
+        if ($model->person_id != null) {
+            return $this->redirect(['person/view', 'id' => $model->person_id]);
+        } else {
+            return $this->redirect(['organization/view', 'id' => $model->organization_id]);
+        }
+    }
+
+    /**
+     * Restores a soft deleted Address model.
+     * If restoration is successful, the browser will be redirected to the 'view' page.
+     * @param int $id ID
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionRestore($id)
+    {
+        $model = $this->findModel($id);
+        $model->restore();
         if ($model->person_id != null) {
             return $this->redirect(['person/view', 'id' => $model->person_id]);
         } else {
