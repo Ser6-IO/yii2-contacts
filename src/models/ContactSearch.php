@@ -5,12 +5,12 @@ namespace ser6io\yii2contacts\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use ser6io\yii2contacts\models\Person;
+use ser6io\yii2contacts\models\Contact;
 
 /**
- * PersonSearch represents the model behind the search form of `ser6io\yii2contacts\models\Person`.
+ * ContactSearch represents the model behind the search form of `ser6io\yii2contacts\models\Contact`.
  */
-class PersonSearch extends Person
+class ContactSearch extends Contact
 {
     /**
      * {@inheritdoc}
@@ -18,8 +18,8 @@ class PersonSearch extends Person
     public function rules()
     {
         return [
-            [['id', 'organization_id', 'user_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-            [['name', 'email', 'phone', 'mobile', 'notes', 'metadata'], 'safe'],
+            [['id', 'type', 'sub_type', 'organization_id', 'contact_id', 'created_at', 'updated_at', 'created_by', 'updated_by', 'isDeleted'], 'integer'],
+            [['nickname', 'name', 'website', 'email', 'phone', 'mobile', 'notes', 'metadata'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class PersonSearch extends Person
      */
     public function search($params)
     {
-        $query = Person::find()->filterDeleted(Yii::$app->request->get('filter_deleted'));
+        $query = Contact::find()->filterDeleted(Yii::$app->request->get('filter_deleted'));
 
         // add conditions that should always apply here
 
@@ -60,15 +60,20 @@ class PersonSearch extends Person
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'type' => $this->type,
+            'sub_type' => $this->sub_type,
             'organization_id' => $this->organization_id,
-            'user_id' => $this->user_id,
+            'contact_id' => $this->contact_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
+            'isDeleted' => $this->isDeleted,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
+        $query->andFilterWhere(['like', 'nickname', $this->nickname])
+            ->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'website', $this->website])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'phone', $this->phone])
             ->andFilterWhere(['like', 'mobile', $this->mobile])

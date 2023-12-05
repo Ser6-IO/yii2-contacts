@@ -7,14 +7,9 @@ use yii\helpers\Html;
 
 $this->title = 'Create Address';
 
-$this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['main/index']];
-if ($model->person_id != null){
-    $this->params['breadcrumbs'][] = ['label' => 'People', 'url' => ['person/index']];
-    $this->params['breadcrumbs'][] = ['label' => $model->person->name, 'url' => ['person/view', 'id' => $model->person_id]];
-} elseif ($model->organization_id != null) {
-    $this->params['breadcrumbs'][] = ['label' => 'Organizations', 'url' => ['organization/index']];
-    $this->params['breadcrumbs'][] = ['label' => $model->organization->nickname, 'url' => ['organization/view', 'id' => $model->organization_id]];
-}
+$this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['contact/index']];
+$this->params['breadcrumbs'][] = ['label' => $model->contact->name, 'url' => ['contact/view', 'id' => $model->contact_id]];
+
 
 $this->params['breadcrumbs'][] = $this->title;
 

@@ -14,23 +14,6 @@ use yii\web\NotFoundHttpException;
 class AddressController extends Controller
 {
     /**
-     * Lists all Address models.
-     *
-     * @return string
-     */
-    public function actionIndex()
-    {
-        $searchModel = new AddressSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
-        $dataProvider->sort = ['defaultOrder' => ['country' => SORT_ASC, 'state' => SORT_ASC, 'city' => SORT_ASC]];
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
      * Returns a list off Addresses in JSON format, that match the search term.
      * 
      * @param string $term
@@ -39,7 +22,7 @@ class AddressController extends Controller
     public function actionSearchAddressByOrgName($name)
     {
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $addresses = Address::find()->joinWith('organization')->where(['like', 'organization.nickname', $name])->asArray()->all();
+        $addresses = Address::find()->joinWith('contact')->where(['like', 'contact.nickname', $name])->asArray()->all();
         return $addresses;
     }
 
@@ -48,22 +31,18 @@ class AddressController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate($p_id = null, $o_id = null)
+    public function actionCreate($contact_id = null)
     {
         $model = new Address();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                if ($p_id) {
-                    return $this->redirect(['/contacts/person/view', 'id' => $model->person_id]);
-                } else {
-                    return $this->redirect(['/contacts/organization/view', 'id' => $model->organization_id]);
-                }
+                Yii::$app->session->addFlash('success', 'New Address created.');
+                return $this->redirect(['/contacts/contact/view', 'id' => $model->contact_id]);
             }
         } else {
             $model->loadDefaultValues();
-            $model->person_id = $p_id;
-            $model->organization_id = $o_id;
+            $model->contact_id = $contact_id;
         }
 
         return $this->render('create', [
@@ -83,11 +62,8 @@ class AddressController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            if ($model->person_id != null) {
-                return $this->redirect(['person/view', 'id' => $model->person_id]);
-            } else {
-                return $this->redirect(['organization/view', 'id' => $model->organization_id]);
-            }
+            Yii::$app->session->addFlash('info', 'Address updated.');
+            return $this->redirect(['/contacts/contact/view', 'id' => $model->contact_id]);
         }
 
         return $this->render('update', [
@@ -106,11 +82,8 @@ class AddressController extends Controller
     {
         $model = $this->findModel($id);
         $model->softDelete();
-        if ($model->person_id != null) {
-            return $this->redirect(['person/view', 'id' => $model->person_id]);
-        } else {
-            return $this->redirect(['organization/view', 'id' => $model->organization_id]);
-        }
+        Yii::$app->session->addFlash('error', 'Address deleted.');
+        return $this->redirect(['/contacts/contact/view', 'id' => $model->contact_id]);
     }
 
     /**
@@ -124,11 +97,8 @@ class AddressController extends Controller
     {
         $model = $this->findModel($id);
         $model->delete();
-        if ($model->person_id != null) {
-            return $this->redirect(['person/view', 'id' => $model->person_id]);
-        } else {
-            return $this->redirect(['organization/view', 'id' => $model->organization_id]);
-        }
+        Yii::$app->session->addFlash('error', 'Address deleted permanently.');
+        return $this->redirect(['/contacts/contact/view', 'id' => $model->contact_id]);
     }
 
     /**
@@ -142,11 +112,8 @@ class AddressController extends Controller
     {
         $model = $this->findModel($id);
         $model->restore();
-        if ($model->person_id != null) {
-            return $this->redirect(['person/view', 'id' => $model->person_id]);
-        } else {
-            return $this->redirect(['organization/view', 'id' => $model->organization_id]);
-        }
+        Yii::$app->session->addFlash('success', 'Address restored.');
+        return $this->redirect(['/contacts/contact/view', 'id' => $model->contact_id]);
     }
 
     /**
@@ -162,6 +129,6 @@ class AddressController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('The requested address does not exist.');
     }
 }

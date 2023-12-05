@@ -55,8 +55,7 @@ function handleCountryState(modelName) {
 
 <?php $form = ActiveForm::begin(); ?>
 
-<?= Html::activeHiddenInput($model, 'person_id') ?>
-<?= Html::activeHiddenInput($model, 'organization_id') ?>
+<?= Html::activeHiddenInput($model, 'contact_id') ?>
 
 <div class="row">
     <div class="col-md-6">

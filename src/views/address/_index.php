@@ -8,18 +8,9 @@ use ser6io\yii2contacts\models\AddressSearch;
 
 
 $searchModel = new AddressSearch();
-
-if ($idParam == 'o_id') {
-    $searchModel->organization_id = $model->id;
-    $url = ['organization/view', 'id' => $model->id];
-} else {
-    $searchModel->person_id = $model->id;
-    $url = ['person/view', 'id' => $model->id];
-}
-
+$searchModel->contact_id = $contact->id;
 $dataProvider = $searchModel->search($this->context->request->queryParams);
 $dataProvider->sort = ['defaultOrder' => ['country' => SORT_ASC, 'state' => SORT_ASC, 'city' => SORT_ASC]];
-
 
 ?>
 
@@ -32,14 +23,14 @@ $dataProvider->sort = ['defaultOrder' => ['country' => SORT_ASC, 'state' => SORT
             'buttons' => ['create'], 
             'visible' => Yii::$app->user->can('contacts'),
             'config' => [
-                'create' => ['url' => ['address/create', $idParam => $model->id]]
+                'create' => ['url' => ['address/create', 'contact_id' => $contact->id]]
             ]
         ],
         [
             'buttons' => ['show-deleted'], 
             'visible' => Yii::$app->user->can('admin'),
             'config' => [
-                'show-deleted' => ['url' => $url]
+                'show-deleted' => ['url' => ['contact/view', 'id' => $contact->id]]
             ]
         ],  
     ],

@@ -3,11 +3,11 @@
 namespace ser6io\yii2contacts\models;
 
 /**
- * This is the ActiveQuery class for [[Person]].
+ * This is the ActiveQuery class for [[Contact]].
  *
- * @see Person
+ * @see Contact
  */
-class PersonQuery extends \yii\db\ActiveQuery
+class ContactQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -25,7 +25,7 @@ class PersonQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Person[]|array
+     * @return Contact[]|array
      */
     public function all($db = null)
     {
@@ -34,7 +34,7 @@ class PersonQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Person|array|null
+     * @return Contact|array|null
      */
     public function one($db = null)
     {

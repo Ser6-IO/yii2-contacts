@@ -20,7 +20,13 @@ use yii\bootstrap5\Html;
                 'soft-delete' => ['route' => 'address',]
             ],
         ],
-        ['buttons' => ['restore'], 'visible' => Yii::$app->user->can('admin')],
+        [
+            'buttons' => ['restore'], 
+            'visible' => Yii::$app->user->can('admin'),
+            'config' => [
+                'restore' => ['url' => ['/contacts/address/restore', 'id' => $model->id]],
+            ],
+        ],
     ],
 ]) ?>
 

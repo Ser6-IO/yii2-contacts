@@ -18,14 +18,9 @@ class AddressQuery extends \yii\db\ActiveQuery
         ];
     }
 
-    public function organization($o_id)
+    public function fromContact($contact_id)
     {
-        return $this->andWhere(['organization_id' => $o_id]);
-    }
-
-    public function person($p_id)
-    {
-        return $this->andWhere(['person_id' => $p_id]);
+        return $this->andWhere(['contact_id' => $contact_id]);
     }
 
     /**

@@ -59,7 +59,7 @@ class Contacts extends \yii\base\Module
     {
         parent::init();
 
-        $this->defaultRoute = 'people';
+        $this->defaultRoute = 'contact/index';
 
         $this->layoutPath = '@app/views/layouts';
 
@@ -68,9 +68,9 @@ class Contacts extends \yii\base\Module
         //Secondary Menu items - must use two columns layout
         if (Yii::$app instanceof \yii\web\Application) {
             Yii::$app->params['secondaryMenu'] = [                
-                ['label' => '<i class="bi bi-person-rolodex"></i> Contacts', 'url' => ['/contacts/main/index'], 'visible' => Yii::$app->user->can('contactsView')],
-                ['label' => '<i class="bi bi-person-lines-fill"></i> People', 'url' => ['/contacts/person/index'], 'visible' => Yii::$app->user->can('contactsView')],
-                ['label' => '<i class="bi bi-building"></i> Organizations', 'url' => ['/contacts/organization/index'], 'visible' => Yii::$app->user->can('contactsView')],
+                ['label' => '<i class="bi bi-person-rolodex"></i> Contacts', 'url' => ['/contacts/contact/index'], 'visible' => Yii::$app->user->can('contactsView')],
+                //['label' => '<i class="bi bi-person-lines-fill"></i> People', 'url' => ['/contacts/contact/index', 'ContactSearch' => ['type' => 0]], 'visible' => Yii::$app->user->can('contactsView')],
+               // ['label' => '<i class="bi bi-building"></i> Organizations', 'url' => ['/contacts/contact/index', 'ContactSearch' => ['type' => 1]], 'visible' => Yii::$app->user->can('contactsView')],
                // ['label' => '<i class="bi bi-geo-alt"></i> Addresses', 'url' => ['/contacts/address/index'], 'visible' => Yii::$app->user->can('contactsView')],  
             ];
         }

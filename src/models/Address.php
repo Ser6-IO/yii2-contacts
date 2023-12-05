@@ -8,8 +8,7 @@ use Yii;
  * This is the model class for table "address".
  *
  * @property int $id
- * @property int|null $person_id
- * @property int|null $organization_id
+ * @property int|null $contact_id
  * @property string $type
  * @property string $line_1
  * @property string|null $line_2
@@ -44,7 +43,7 @@ class Address extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type', 'person_id', 'organization_id', ], 'integer'],
+            [['type', 'contact_id', ], 'integer'],
             [['line_1', 'city', 'state', 'country'], 'required'],
             [['line_1', 'line_2', 'city', 'state', 'zip'], 'string', 'max' => 255],
             [['country'], 'string', 'max' => 2],
@@ -79,8 +78,7 @@ class Address extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'person_id' => 'Person ID',
-            'organization_id' => 'Organization ID',
+            'contact_id' => 'Contact',
             'type' => 'Type',
             'line_1' => 'Line 1',
             'line_2' => 'Line 2',
@@ -102,13 +100,8 @@ class Address extends \yii\db\ActiveRecord
         return new AddressQuery(get_called_class());
     }
 
-    public function getPerson()
+    public function getContact()
     {
-        return $this->hasOne(Person::class, ['id' => 'person_id']);
-    }
-
-    public function getOrganization()
-    {
-        return $this->hasOne(Organization::class, ['id' => 'organization_id']);
+        return $this->hasOne(Contact::class, ['id' => 'contact_id']);
     }
 }

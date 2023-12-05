@@ -6,40 +6,61 @@ use Yii;
 use ser6io\yii2admin\models\UserAdmin;
 
 /**
- * This is the model class for table "person".
+ * This is the model class for table "contact".
  *
  * @property int $id
+ * @property string $nickname
  * @property string $name
- * @property string|null $email
+ * @property string|null $website
+ * @property string $email
  * @property string|null $phone
  * @property string|null $mobile
  * @property string|null $notes
  * @property string|null $metadata
+ * @property int $type
+ * @property int $sub_type
  * @property int|null $organization_id
- * @property int|null $user_id
+ * @property int|null $contact_id
  * @property int $created_at
  * @property int $updated_at
  * @property int $created_by
  * @property int $updated_by
+ * @property int $isDeleted
  */
-class Person extends \yii\db\ActiveRecord
+class Contact extends \yii\db\ActiveRecord
 {
-    public $create_system_user = false;
+    const TYPE = [
+        0 => 'Person',
+        1 => 'Organization',
+        2 => 'Group',
+        3 => 'Other',
+    ];
+    
+    const SUB_TYPE = [
+        0 => 'Customer',
+        1 => 'Vendor',
+        2 => 'Partner',
+        3 => 'Supplier',
+        99 => 'Other',
+    ];
+
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'person';
+        return 'contact';
     }
 
-    /**
+     /**
      * {@inheritdoc}
      */
     public function behaviors()
     {
         return [
-            \yii\behaviors\TimestampBehavior::class,
+            'timestampBehavior' => [
+                'class' => \yii\behaviors\TimestampBehavior::class,
+            ],
             'blameableBehavior' => [
                 'class' => \yii\behaviors\BlameableBehavior::className(),
                 'defaultValue' => '1',
@@ -48,11 +69,11 @@ class Person extends \yii\db\ActiveRecord
                 'class' => \yii2tech\ar\softdelete\SoftDeleteBehavior::class,
                 'softDeleteAttributeValues' => [
                     'isDeleted' => true
-                ],
-                //'replaceRegularDelete' => true
+                ],//'replaceRegularDelete' => true
             ],
         ];
     }
+
 
     /**
      * {@inheritdoc}
@@ -60,14 +81,12 @@ class Person extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'email'], 'required'],
-            ['email', 'trim'],
-            ['email', 'email'],
-            [['email', 'mobile'], 'unique'],
+            [['name'], 'required'],
             [['notes'], 'string'],
-            [['organization_id', 'user_id'], 'integer'],
-            [['name', 'phone', 'mobile'], 'string', 'max' => 255],
-            ['create_system_user', 'boolean'],
+            [['metadata'], 'safe'],
+            [['type', 'sub_type', 'organization_id', 'contact_id'], 'integer'],
+            [['nickname', 'name', 'website', 'email', 'phone', 'mobile'], 'string', 'max' => 255],
+            [['email', 'nickname'], 'unique'],
         ];
     }
 
@@ -78,48 +97,56 @@ class Person extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'nickname' => 'Nickname',
             'name' => 'Name',
+            'website' => 'Website',
             'email' => 'Email',
             'phone' => 'Phone',
             'mobile' => 'Mobile',
             'notes' => 'Notes',
             'metadata' => 'Metadata',
-            'organization_id' => 'Organization ID',
-            'user_id' => 'User ID',
+            'type' => 'Type',
+            'sub_type' => 'Sub Type',
+            'organization_id' => 'Parent Organization',
+            'contact_id' => 'Contact',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
+            'isDeleted' => 'Is Deleted',
         ];
     }
 
     /**
      * {@inheritdoc}
-     * @return PersonQuery the active query used by this AR class.
+     * @return ContactQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new PersonQuery(get_called_class());
+        return new ContactQuery(get_called_class());
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getAddresses()
     {
-        return $this->hasMany(Address::class, ['person_id' => 'id']);
+        return $this->hasMany(Address::class, ['contact_id' => 'id']);
+    }
+
+    public function getDesignatedContact()
+    {
+        return $this->hasOne(Contact::class, ['id' => 'contact_id']);
+    }
+
+    public function getContacts()
+    {
+        return $this->hasMany(Contact::class, ['organization_id' => 'id']);
     }
 
     public function getOrganization()
     {
-        return $this->hasOne(Organization::class, ['id' => 'organization_id']);
-    }
-
-    public function getCreatedBy()
-    {
-        return $this->hasOne(UserAdmin::class, ['id' => 'created_by']);
-    }
-
-    public function getUpdatedBy()
-    {
-        return $this->hasOne(UserAdmin::class, ['id' => 'updated_by']);
+        return $this->hasOne(Contact::class, ['id' => 'organization_id']);
     }
 
     public function getUser()
@@ -130,6 +157,16 @@ class Person extends \yii\db\ActiveRecord
     public function getUserAccounts()
     {
         return $this->hasMany(UserAdmin::class, ['email' => 'email']);
+    }
+
+    public function getCreatedBy()
+    {
+        return $this->hasOne(UserAdmin::class, ['id' => 'created_by']);
+    }
+
+    public function getUpdatedBy()
+    {
+        return $this->hasOne(UserAdmin::class, ['id' => 'updated_by']);
     }
 
     public function beforeDelete()
