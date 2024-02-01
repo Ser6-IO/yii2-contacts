@@ -65,10 +65,6 @@ $addresses = \ser6io\yii2contacts\models\Address::find()->notDeleted()->count();
 
 <div class="collapse mb-2" id="collapseSearch">
     <div class="card card-body">
-        <div class="input-group">    
-            <input type="text" class="form-control" placeholder="Search...">
-            <button class="btn btn-outline-secondary"  title="Search" data-bs-toggle="tooltip" type="button" id="button-addon2"><i class="bi bi-search"></i></button>
-        </div>
         <?= $this->render('_search', ['model' => $searchModel]); ?>
     </div>
 </div>

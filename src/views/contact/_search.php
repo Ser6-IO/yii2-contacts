@@ -1,7 +1,7 @@
 <?php
 
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap5\Html;
+use ser6io\yii2bs5widgets\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var ser6io\yii2contacts\models\ContactSearch $model */
@@ -53,7 +53,7 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'isDeleted') ?>
 
-    <div class="form-group">
+    <div class="form-group mt-3">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
     </div>
